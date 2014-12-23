@@ -13,7 +13,14 @@ namespace CGC
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            if (new AuthorizationProcessor().IsUserAuthenticated())
+            {
+                Application.Run(new MainForm());
+            }
+            else
+            {
+                Application.Run(new AuthorizationForm());
+            }
         }
     }
 }

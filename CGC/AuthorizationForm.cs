@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using KeyVerification;
 
 namespace CGC
 {
@@ -11,7 +12,7 @@ namespace CGC
         {
             InitializeComponent();
             authorizationProcessor = new AuthorizationProcessor();
-            textBox1.Text = authorizationProcessor.MachineIdHash;
+            textBox1.Text = authorizationProcessor.GetMachineIdHash();
         }
 
         private void AuthorizationForm_Shown(object sender, EventArgs e)
@@ -28,7 +29,10 @@ namespace CGC
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(textBox1.Text);
+            if (textBox1.Text != string.Empty)
+            {
+                Clipboard.SetText(textBox1.Text);
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -50,6 +54,11 @@ namespace CGC
             {
                 MessageBox.Show("Введенный вами ключ неверен! Проверьте правильность ввода.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            button3.Enabled = textBox2.Text.Length == 32;
         }
     }
 }

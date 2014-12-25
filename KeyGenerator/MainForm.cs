@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Windows.Forms;
+using KeyVerification;
+
 
 namespace CGC
 {
-    public partial class AuthorizationForm : Form
+    public partial class MainForm : Form
     {
         private AuthorizationProcessor authorizationProcessor;
 
-        public AuthorizationForm()
+        public MainForm()
         {
             InitializeComponent();
             authorizationProcessor = new AuthorizationProcessor();
-            textBox1.Text = authorizationProcessor.MachineIdHash;
         }
 
         private void AuthorizationForm_Shown(object sender, EventArgs e)
         {
             CenterScreenForm(this);
-            
         }
 
-        private void CenterScreenForm(AuthorizationForm mf)
+        private void CenterScreenForm(MainForm mf)
         {
             mf.Left = (Screen.PrimaryScreen.Bounds.Width - mf.Width) / 2;
             mf.Top = (Screen.PrimaryScreen.Bounds.Height - mf.Height) / 2;
@@ -28,28 +28,25 @@ namespace CGC
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(textBox1.Text);
+            if (textBox2.Text != String.Empty)
+            {
+                Clipboard.SetText(textBox2.Text);
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            textBox2.Text = Clipboard.GetText();
+            textBox1.Text = Clipboard.GetText();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (authorizationProcessor.IsUserAuthenticated(textBox2.Text))
-            {
-                authorizationProcessor.SaveCDKeyFile(textBox2.Text);
-                MessageBox.Show("Ключ успешно применен и был сохранен в каталоге программы.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                var mainForm = new MainForm();
-                mainForm.Show();
-                this.Hide();
-            }
-            else
-            {
-                MessageBox.Show("Введенный вами ключ неверен! Проверьте правильность ввода.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            textBox2.Text = authorizationProcessor.GenerateCDKey(textBox1.Text);
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            button3.Enabled = textBox1.Text.Length == 32;
         }
     }
 }

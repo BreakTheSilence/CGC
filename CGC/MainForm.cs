@@ -421,6 +421,10 @@ namespace CGC
                     e.Cancel = true;
                 }
             }
+            if (!e.Cancel)
+            {
+                Application.ExitThread();
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)

@@ -12,32 +12,21 @@ namespace CGC
 
         private string cdKeyFileName;
 
-        private const int MD5HashByteLength = 32;
-
         public AuthorizationProcessor()
         {
             cdKeyFileName = "CDKey.cdkey";
             MachineIdHash = GetMD5StringHash(GetCPUId());
         }
 
-        public bool IsUserAuthenticated(string CDKey = "")
+        public bool IsUserAuthenticated()
         {
-            if (CDKey == String.Empty)
-            {
-                return GenerateCDKey() == ReadCDKeyFile();
-            }
-            return GenerateCDKey() == CDKey;
+            return MachineIdHash == ReadCDKeyFile();
         }
 
         private string GetMD5StringHash(String inputString)
         {
-            var inputBytes = Encoding.ASCII.GetBytes(inputString);
-            return GetMD5StringHash(inputBytes);
-        }
-
-        private string GetMD5StringHash(byte[] inputBytes)
-        {
             var md5 = MD5.Create();
+            var inputBytes = Encoding.ASCII.GetBytes(inputString);
             var hash = md5.ComputeHash(inputBytes);
             var stringbuilder = new StringBuilder();
             foreach (byte hashByte in hash)
@@ -60,12 +49,11 @@ namespace CGC
             return cpuId;
         }
 
-        public void SaveCDKeyFile(string CDKey)
+        private void SaveCDKeyFile(string writeToFile)
         {
             File.Delete(cdKeyFileName);
             var streamWriter = new StreamWriter(cdKeyFileName);
-            streamWriter.Write(CDKey);
-            streamWriter.Close();
+            streamWriter.Write(writeToFile);
         }
 
         private string ReadCDKeyFile()
@@ -76,30 +64,6 @@ namespace CGC
                 return streamReader.ReadToEnd();
             }
             return String.Empty;
-        }
-
-        private string GenerateCDKey()
-        {
-            var inputBytes = Encoding.ASCII.GetBytes(MachineIdHash);
-            var privateByteKey = GetPriveteKey();
-            var resultBytes = new byte[MD5HashByteLength];
-            for (var i = 0; i < inputBytes.Length; i++)
-            {
-                resultBytes[i] = (byte) (inputBytes[i] + privateByteKey[i]);
-            }
-            return GetMD5StringHash(resultBytes);
-        }
-
-        private byte[] GetPriveteKey()
-        {
-            var privateByteKey = new byte[MD5HashByteLength];
-            int seed = 13;
-            for (var i = 0; i < privateByteKey.Length; i++)
-            {
-                seed += seed % 11;
-                privateByteKey[i] = Convert.ToByte(seed % 7);
-            }
-            return privateByteKey;
         }
     }
 }

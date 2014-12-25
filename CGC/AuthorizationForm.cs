@@ -35,5 +35,21 @@ namespace CGC
         {
             textBox2.Text = Clipboard.GetText();
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (authorizationProcessor.IsUserAuthenticated(textBox2.Text))
+            {
+                authorizationProcessor.SaveCDKeyFile(textBox2.Text);
+                MessageBox.Show("Ключ успешно применен и был сохранен в каталоге программы.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                var mainForm = new MainForm();
+                mainForm.Show();
+                this.Hide();
+            }
+            else
+            {
+                MessageBox.Show("Введенный вами ключ неверен! Проверьте правильность ввода.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
     }
 }

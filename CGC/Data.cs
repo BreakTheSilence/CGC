@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 /* segmentsName
@@ -48,8 +43,6 @@ using System.Windows.Forms;
 12 - "Правая стопа";
 13 - "Левая стопа";
 */
-
-
 
 static class ProgramData
 {

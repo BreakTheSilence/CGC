@@ -1,26 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace CGC
 {
     public partial class AuthorizationForm : Form
     {
+        private AuthorizationProcessor authorizationProcessor;
+
         public AuthorizationForm()
         {
             InitializeComponent();
+            authorizationProcessor = new AuthorizationProcessor();
+            textBox1.Text = authorizationProcessor.MachineIdHash;
         }
 
         private void AuthorizationForm_Shown(object sender, EventArgs e)
         {
             CenterScreenForm(this);
-            var authorizationProcessor = new AuthorizationProcessor();
-            textBox1.Text = authorizationProcessor.MachineIdHash;
+            
         }
 
         private void CenterScreenForm(AuthorizationForm mf)

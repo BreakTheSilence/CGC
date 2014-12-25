@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 //Position modify: X += 1, Y = panel1.Height - 2;
@@ -17,6 +11,12 @@ namespace CGC
         public MainForm()
         {
             InitializeComponent();
+            if (!Config.LoadFromConfigurationFile())
+            {
+                MessageBox.Show("Ошибка загрузки файла конфигурация. Сброс настроек!", "Ошибка загрузки файла конфигурации!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ProgramData.SetDefaults();
+                this.RefreshAll();
+            }
         }
 
         private void выходToolStripMenuItem_Click(object sender, EventArgs e)
@@ -66,12 +66,6 @@ namespace CGC
         private void Form1_Shown(object sender, EventArgs e)
         {
             panel1.Focus();
-            if (!Config.LoadFromConfigurationFile())
-            {
-                MessageBox.Show("Ошибка загрузки файла конфигурация. Сброс настроек!", "Ошибка загрузки файла конфигурации!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ProgramData.SetDefaults();
-                this.RefreshAll();
-            }
         }
 
         private void trackBar1_ValueChanged(object sender, EventArgs e)
